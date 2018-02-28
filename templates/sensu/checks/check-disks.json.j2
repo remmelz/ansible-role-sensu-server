@@ -1,0 +1,20 @@
+
+ {
+  "checks": {
+
+    "check-disk-usage": {
+
+      "command": "/opt/sensu/plugins/check-disk-usage.rb -x debugfs,tracefs,tempfs",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60,
+      "contact": "ops"
+
+    }
+  }
+}
+
+

@@ -1,0 +1,20 @@
+
+ {
+  "checks": {
+
+    "check-memory-percent": {
+
+      "command": "/opt/sensu/plugins/check-memory-percent.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60,
+      "contact": "ops"
+
+    }
+  }
+}
+
+

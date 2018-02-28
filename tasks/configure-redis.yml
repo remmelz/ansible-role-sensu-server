@@ -1,0 +1,16 @@
+
+---
+
+  - name: Starting Redis service
+    systemd:
+      name: "redis@redis"
+      enabled: yes
+      state: started
+    when: ansible_os_family|lower == 'suse'
+
+  - name: Starting Redis service
+    systemd:
+      name: "redis"
+      enabled: yes
+      state: started
+    when: ansible_os_family|lower == 'redhat'

@@ -1,0 +1,19 @@
+
+---
+
+  network      : "192.168.1.0/24"
+
+  repo_rabbitmq : "https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.3"
+  repo_erlang   : "https://github.com/rabbitmq/erlang-rpm/releases/download/v20.2.3"
+  repo_sensu    : "https://repositories.sensuapp.org/yum/7/x86_64"
+  repo_uchiwa   : "http://dl.bintray.com/palourde/uchiwa"
+
+  rpm_rabbitmq  : "rabbitmq-server-3.7.3-1.el7.noarch.rpm"
+  rpm_erlang    : "erlang-20.2.3-1.el7.centos.x86_64.rpm"
+  rpm_sensu     : "sensu-1.2.1-2.el7.x86_64.rpm"
+  rpm_uchiwa    : "uchiwa-1.1.3-2.x86_64.rpm"
+
+  plugin_script : "sensu-plugins-install.sh"
+
+  uchiwa_css   : "/opt/uchiwa/src/public/bower_components/uchiwa-web/css/uchiwa-default/uchiwa-default.css"
+

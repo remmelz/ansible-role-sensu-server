@@ -1,0 +1,26 @@
+
+---
+
+  - name: Downloading RabbitMQ RPM file
+    shell: wget -P /var/tmp -nc {{ repo_rabbitmq }}/{{ rpm_rabbitmq }}
+
+  - name: Downloading Erlang RPM file
+    shell: wget -P /var/tmp -nc {{ repo_erlang }}/{{ rpm_erlang }}
+
+  - name: Installing the Erlang RPM file
+    yum:
+      name: /var/tmp/{{ rpm_erlang }}
+      disable_gpg_check: yes
+      state: present
+
+  - name: Installing the RabbitMQ RPM file
+    yum:
+      name: /var/tmp/{{ rpm_rabbitmq }}
+      disable_gpg_check: yes
+      state: present
+
+  - name: Enable nis for SELinux
+    seboolean:
+      name: nis_enabled
+      state: yes
+      persistent: yes

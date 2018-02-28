@@ -1,0 +1,11 @@
+---
+
+  - name: Restart Sensu server
+    service:
+      name: sensu-server
+      state: restarted
+
+  - name: Restart UChiwa server
+    service:
+      name: uchiwa
+      state: restarted

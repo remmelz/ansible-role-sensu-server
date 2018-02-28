@@ -1,0 +1,20 @@
+
+ {
+  "checks": {
+
+    "check-load": {
+
+      "command": "/opt/sensu/plugins/check-load.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60,
+      "contact": "ops"
+
+    }
+  }
+}
+
+

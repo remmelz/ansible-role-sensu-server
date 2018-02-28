@@ -1,0 +1,29 @@
+
+---
+
+  - name: Enable firewalld
+    service:
+      name: firewalld
+      state: started
+      enabled: yes
+
+  - name: Opening UChiwa firewall port 3000
+    firewalld:
+      port: 3000/tcp
+      zone: public
+      permanent: true
+      state: enabled
+
+  - name: Opening RabbitMQ firewall port 5672
+    firewalld:
+      port: 5672/tcp
+      zone: public
+      permanent: true
+      state: enabled
+
+  - name: Restarting firewalld
+    service:
+      name: firewalld
+      state: restarted
+
+

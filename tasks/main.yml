@@ -1,0 +1,30 @@
+
+---
+
+  - include_tasks: download-packages.yml
+
+  - name: Installing Sensu on SuSE
+    block:
+      - include_tasks: ./suse/install-rabbitmq.yml
+      - include_tasks: ./suse/install-redis.yml
+      - include_tasks: ./suse/install-sensu.yml
+      - include_tasks: ./suse/install-uchiwa.yml
+      - include_tasks: ./suse/configure-firewall.yml
+    when: ansible_os_family|lower == 'suse'
+ 
+  - name: Installing Sensu on RedHat
+    block:
+      - include_tasks: ./redhat/install-rabbitmq.yml
+      - include_tasks: ./redhat/install-redis.yml
+      - include_tasks: ./redhat/install-sensu.yml
+      - include_tasks: ./redhat/install-uchiwa.yml
+      - include_tasks: ./redhat/configure-firewall.yml
+    when: ansible_os_family|lower == 'redhat'
+
+  - include_tasks: configure-rabbitmq.yml
+  - include_tasks: configure-redis.yml
+  - include_tasks: configure-sensu.yml
+  - include_tasks: configure-uchiwa.yml
+
+
+

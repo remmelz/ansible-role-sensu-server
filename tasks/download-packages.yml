@@ -1,0 +1,10 @@
+ 
+---
+
+  - name: Downloading Sensu RPM file
+    shell: wget -P /var/tmp -nc {{ repo_sensu }}/{{ rpm_sensu }}
+
+  - name: Downloading UChiwa RPM file
+    shell: wget -P /var/tmp -nc {{ repo_uchiwa }}/{{ rpm_uchiwa }}
+
+

@@ -1,0 +1,9 @@
+
+---
+
+  - name: Installing the UChiwa RPM file
+    yum:
+      name: /var/tmp/{{ rpm_uchiwa }}
+      disable_gpg_check: yes
+      state: present
+

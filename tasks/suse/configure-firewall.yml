@@ -1,0 +1,23 @@
+
+---
+
+  - name: Enabling SuSE firewall
+    systemd:
+      name: SuSEfirewall2
+      enabled: yes
+      state: started
+
+  - name: Opening SuSE firewall ports for UChiwa and RabbitMQ
+    lineinfile:
+      dest: "/etc/sysconfig/SuSEfirewall2"
+      regexp: "^#?FW_SERVICES_ACCEPT_EXT"
+      line: "FW_SERVICES_ACCEPT_EXT=\"{{ network }},tcp,3000 {{ network }},tcp,5672\""
+
+  - name: Restarting SuSE firewall
+    systemd:
+      name: SuSEfirewall2
+      state: restarted
+
+
+
+

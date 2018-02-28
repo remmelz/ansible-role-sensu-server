@@ -1,0 +1,10 @@
+
+---
+
+  - name: Installing RabbitMQ
+    zypper:
+      name: rabbitmq-server
+      state: present
+
+
+

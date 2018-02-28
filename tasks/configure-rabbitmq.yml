@@ -1,0 +1,20 @@
+
+---
+
+  - name: Starting RabbitMQ service
+    systemd: name=rabbitmq-server enabled=yes state=started
+
+  - name: Add RabbitMQ vhost sensu
+    rabbitmq_vhost:
+      name: /sensu
+      state: present
+
+  - name: Add RabbitMQ user sensu
+    rabbitmq_user:
+      user: sensu
+      password: secret
+      vhost: /sensu
+      configure_priv: .*
+      read_priv: .*
+      write_priv: .*
+      state: present 

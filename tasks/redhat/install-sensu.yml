@@ -1,0 +1,10 @@
+
+---
+
+  - name: Installing the Sensu RPM file
+    yum:
+      name: /var/tmp/{{ rpm_sensu }}
+      disable_gpg_check: yes
+      state: present
+
+

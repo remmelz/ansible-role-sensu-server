@@ -1,0 +1,16 @@
+ 
+---
+
+  - name: Installing Redis
+    zypper:
+      name: redis
+      state: present
+
+  - name: Copying Redis configuration file
+    template:
+      src: ./templates/redis/redis.conf.j2
+      dest: /etc/redis/redis.conf
+      owner: root
+      group: redis
+      mode: 0640
+
