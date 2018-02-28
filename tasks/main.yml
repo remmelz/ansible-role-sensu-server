@@ -23,8 +23,12 @@
 
   - include_tasks: configure-rabbitmq.yml
   - include_tasks: configure-redis.yml
-  - include_tasks: configure-sensu.yml
-  - include_tasks: configure-uchiwa.yml
+
+  - name: Configuring Sensu
+    block:
+      - include_tasks: configure-sensu.yml
+      - include_tasks: configure-uchiwa.yml
+    tags: configure
 
 
 

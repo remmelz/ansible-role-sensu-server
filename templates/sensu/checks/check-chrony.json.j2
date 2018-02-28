@@ -1,0 +1,20 @@
+
+ {
+  "checks": {
+
+    "check-chrony": {
+
+      "command": "/opt/sensu/plugins/check-chrony.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 120,
+      "contact": "ops"
+
+    }
+  }
+}
+
+
