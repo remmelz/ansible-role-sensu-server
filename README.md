@@ -3,4 +3,6 @@
 Ansible playbook for installing Sensu Server
 
 Compatible with:
-* OpenSUSE Tumbleweed
+* OpenSUSE
+* CentOS 7
+* RedHat 7
