@@ -1,7 +1,7 @@
 
 
 - name: Deploying a sensu server
-  hosts: sensuserver
+  hosts: sensu-server
 
   roles:
     - ansible-role-sensu-server

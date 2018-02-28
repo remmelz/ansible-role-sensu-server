@@ -21,6 +21,14 @@
     with_filetree: ./templates/sensu/
     when: item.state == 'file'
 
+  - name: Copying Sensu commandline tool
+    template:
+      src: ./templates/scripts/sensu-cli-dashboard.j2
+      dest: /usr/local/bin/sensu-cli-dashboard
+      owner: root
+      group: root
+      mode: 0755
+
   - name: Starting Sensu server
     systemd:
       name: sensu-server

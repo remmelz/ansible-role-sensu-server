@@ -1,0 +1,242 @@
+#!/usr/bin/ruby
+#  encoding: UTF-8
+#
+# DESCRIPTION:
+#   This is a commandline version of Uchiwa.
+#
+#
+# OUTPUT:
+#   List of Sensu events or clients.
+#
+# PLATFORMS:
+#   Linux, Windows, BSD, Solaris, etc
+#
+# DEPENDENCIES:
+#   Sensu
+#
+# USAGE:
+#
+# NOTES:
+#
+# LICENSE:
+#   Copyright 2016 Kees Remmelzwaal <kees@fastmail.com>
+#   Released under the same terms as Sensu (the MIT license); see LICENSE
+#   for details.
+#
+
+require 'net/http'
+require 'json'
+
+@datacenters = { 
+  "LAN": { 'ip': '127.0.0.1', 'user': 'sensu', 'passwd': 'secret' }
+}
+
+@showclients   = false
+@showevents    = false
+@pretty        = false
+@pretty        = false
+@loop          = false
+@showdata      = false
+@hidesilenced  = false
+@subscriptions = [ ]
+
+###############################################
+
+c = 0
+ARGV.each do |arg|
+    @showclients   = true if arg == "--list-clients"
+    @showevents    = true if arg == "--list-events"
+    @screensaver   = true if arg == "--screensaver"
+    @hidesilenced  = true if arg == "--hidesilenced"
+    @pretty        = true if arg == "--pretty"
+    @loop          = true if arg == "--loop"
+    @showhelp      = true if arg == "--help"
+    @showdate      = true if arg == "--date"
+    if arg == "--subs"
+      @subscriptions = eval(ARGV[c+1])
+    end
+    c += 1
+end
+
+###############################################
+def colorize(text, color_code)
+    if @pretty == true
+        "#{color_code}#{text}\033[0m" 
+    else
+        "#{text}" 
+    end
+end
+
+def redbg(text);    colorize(text, "\033[0;41m"); end
+def greenbg(text);  colorize(text, "\033[0;42m"); end
+def yellowbg(text); colorize(text, "\033[0;43m"); end
+def graybg(text);   colorize(text, "\033[0;100m"); end
+def bluebg(text);   colorize(text, "\033[0;44m"); end
+
+def white(text);  colorize(text, "\033[0;97m"); end
+def blue(text);  colorize(text, "\033[0;34m"); end
+def magenta(text);  colorize(text, "\033[0;35m"); end
+def lightyellow(text); colorize(text, "\033[0;93m"); end
+def lightgray(text); colorize(text, "\033[0;37m"); end
+def darkgray(text); colorize(text, "\033[0;90m"); end
+
+###############################################
+
+def show_help()
+
+    puts """
+    --list-clients                 list all connected clients
+    --list-events                  list all known events
+
+    --screensaver                  scroll text a litte bit in loop mode
+    --pretty                       display colored text
+    --loop                         loop every 10 seconds
+    --date                         show current date in the header
+
+    --hidesilenced                 hide all silenced alerts
+    --sub \"[ 'sub1','sub2' ]\"      only show given subscriptions
+    --help                         show this help message
+    """
+    exit 1
+end
+
+def sensu_api(request)
+
+    result = Array.new
+    @datacenters.each_key do |dc|
+
+        ipaddr = @datacenters[:"#{dc}"][:"ip"]
+        user   = @datacenters[:"#{dc}"][:"user"]
+        passwd = @datacenters[:"#{dc}"][:"passwd"]
+        url    = "http://#{ipaddr}:4567/#{request}"
+
+        uri = URI(url)
+        req = Net::HTTP::Get.new(uri.path, initheader={'Content-Type' =>'application/json'})
+        req.basic_auth(user, passwd)
+        res      = Net::HTTP.new(uri.hostname, uri.port).start { |http| http.request(req) }
+        output   = JSON.parse(res.body)
+        output.each do |line|
+            line['datacenter'] = dc
+            result.push(line)
+        end
+    end
+ 
+    return result
+end
+
+def get_clients
+
+    clients = sensu_api('clients')
+
+    clients.each do |client|
+        dc     = magenta(client['datacenter'])
+        host   = white(client['name'])
+        ipaddr = blue(client['address'])
+        subs   = client['subscriptions']
+
+        subscription = Array.new
+        subs.each do |sub| 
+          next if sub.include? 'client:'
+          subscription.insert(-1, sub)
+        end
+        subscription  = magenta(subscription)
+
+        if @subscriptions.length > 0
+            subs.each do |sub|
+                if @subscriptions.include? sub
+                    printf("%-17s%-55s%-30s%-30s\n", dc, host, ipaddr, subscription)
+                end
+            end
+        else
+            printf("%-17s%-55s%-30s%-30s\n", dc, host, ipaddr, subscription)
+        end
+  end
+end
+
+
+def get_events 
+
+    if @subscriptions.length > 0
+        print 'Events for ' if @subscriptions
+        c = 0 
+        @subscriptions.each do |sub|
+            if c == 6
+              puts bluebg('....')
+              break
+            end
+            sub = ':'+sub.split(':')[1] if sub.include? 'client:'
+            #sub = sub[0,12]+'..' if sub.length > 12
+            print bluebg(sub)+'  '
+            c += 1
+        end
+        puts "\n\n" if @subscriptions
+    end
+
+    e, s = 0, 0
+    events = sensu_api('events')
+    events.each do |event|
+        dc     = magenta(event['datacenter'])
+        client = lightyellow(event['client']['name']) if event['check']['status'] == 1
+        client = redbg(event['client']['name']) if event['check']['status'] == 2
+        client = graybg(event['client']['name']) if event['check']['status'] == 3
+        alert  = white(event['check']['output']).gsub("\n","")
+        alert  = alert[0,70]+'...' if alert.size > 70
+
+        subs   = event['client']['subscriptions']
+
+        if @hidesilenced
+            if event['silenced']
+                s += 1
+                next
+            end
+        end
+
+        if @subscriptions.length > 0
+            subs.each do |sub|
+                if @subscriptions.include? sub
+                    printf("%-17s%-43s%-30s\n", dc, client, alert)
+                    e += 1
+                    break
+                end
+            end
+        else
+            printf("%-17s%-43s%-30s\n", dc, client, alert)
+            e += 1
+        end
+    end
+    puts greenbg('Hooray, no alerts!!!') if e == 0
+
+    # Show amount of silenced hosts
+    puts darkgray('.'*s) if s > 0
+end
+
+###############################################
+
+show_help if @showhelp
+system("clear") if @loop
+
+c = 1
+while true
+
+    if @screensaver
+        puts "\n"*c 
+        c = 1 if c == 3
+    end
+
+    if @showdate
+        system("date")
+        puts
+    end
+
+    get_events  if @showevents
+    puts "----" if (@showevents && @showclients)
+    get_clients if @showclients
+
+    c += 1
+    break if not @loop
+
+    sleep(10)
+    system("clear")
+end
+
+
