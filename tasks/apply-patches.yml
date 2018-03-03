@@ -1,0 +1,14 @@
+ 
+---
+
+  - name: Patching default UChiwa css file
+    template:
+      src: ./templates/uchiwa/css/uchiwa-default.css.j2
+      dest: "{{ uchiwa_css }}"
+      owner: uchiwa
+      group: uchiwa
+      mode: 0660
+
+
+
+
