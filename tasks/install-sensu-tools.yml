@@ -9,5 +9,11 @@
       group: root
       mode: 0755
 
-
+  - name: Copying Sensu extensions
+    template:
+      src: ./templates/sensu/extensions/elastic.rb.j2
+      dest: /etc/sensu/extensions/elastic.rb
+      owner: sensu
+      group: sensu
+      mode: 0644
 

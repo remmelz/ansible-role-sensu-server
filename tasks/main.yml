@@ -21,7 +21,7 @@
       - include_tasks: ./redhat/configure-firewall.yml
     when: ansible_os_family|lower == 'redhat'
 
-  - include_tasks: install-sensucli.yml
+  - include_tasks: install-sensu-tools.yml
   - include_tasks: apply-patches.yml
   - include_tasks: configure-rabbitmq.yml
   - include_tasks: configure-redis.yml

@@ -1,0 +1,18 @@
+ 
+{
+  "handlers": {
+
+    "logstash": {
+
+      "mutator": "elastic",
+      "type": "udp",
+
+      "socket": {
+        "host": "127.0.0.1",
+        "port": 4040
+      }
+    }
+  }
+}
+
+

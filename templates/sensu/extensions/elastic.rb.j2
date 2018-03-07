@@ -1,0 +1,63 @@
+
+require "sensu/extension"
+require "json"
+
+module Sensu
+
+  module Extension
+
+    class ElasticMetrics < Mutator
+
+      def name
+        "elastic"
+      end
+
+      def description
+        "Elastic Metric handler"
+      end
+
+      def run(event)
+
+        check_output  = event[:check][:output]
+        check_type    = event[:check][:type]
+        check_occurs  = event[:check][:occurrences]
+        occurrences   = event[:occurrences]
+        silenced      = event[:silenced]
+
+        check_occurs = 1 if check_occurs.nil?
+
+        if check_type == 'standard'
+          if silenced == false && occurrences == check_occurs
+
+            output = {
+              hostname:  event[:client][:name],
+              metricset: 'event',
+              data: {
+                status: event[:check][:status],
+                 event: check_output
+              }
+            }
+
+            yield(output.to_json, 0)
+
+          end
+
+          return
+        end
+
+        if not check_output.include? "{"
+          return
+        end
+
+        open('/tmp/out', 'a') { |f|
+          f.puts check_output
+        }
+
+        yield(check_output, 0)
+
+      end
+    end
+  end
+end
+
+
