@@ -1,6 +1,11 @@
 
 ---
 
+  - name: Installing SuSE firewall
+    zypper:
+      name: SuSEfirewall2
+      state: present
+
   - name: Enabling SuSE firewall
     systemd:
       name: SuSEfirewall2
@@ -11,7 +16,7 @@
     lineinfile:
       dest: "/etc/sysconfig/SuSEfirewall2"
       regexp: "^#?FW_SERVICES_ACCEPT_EXT"
-      line: "FW_SERVICES_ACCEPT_EXT=\"{{ network }},tcp,3000 {{ network }},tcp,5672\""
+      line: "FW_SERVICES_ACCEPT_EXT=\"0.0.0.0/0,tcp,22 0.0.0.0/0,tcp,3000 0.0.0.0/0,tcp,5672\""
 
   - name: Restarting SuSE firewall
     systemd:

@@ -11,6 +11,7 @@
       - include_tasks: ./suse/install-uchiwa.yml
       - include_tasks: ./suse/configure-firewall.yml
     when: ansible_os_family|lower == 'suse'
+    tags: install
  
   - name: Installing Sensu on RedHat
     block:
