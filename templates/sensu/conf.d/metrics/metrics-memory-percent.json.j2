@@ -1,0 +1,21 @@
+
+ {
+  "checks": {
+
+    "metrics-memory-percent": {
+
+      "type": "metric",
+
+      "command": "/opt/sensu/plugins/metrics-elastic-memory-percent.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60
+
+    }
+  }
+}
+
+

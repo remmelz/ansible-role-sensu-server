@@ -1,0 +1,21 @@
+
+ {
+  "checks": {
+
+    "metrics-disk-usage": {
+
+      "type": "metric",
+
+      "command": "/opt/sensu/plugins/metrics-elastic-disk-usage.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60
+
+    }
+  }
+}
+
+

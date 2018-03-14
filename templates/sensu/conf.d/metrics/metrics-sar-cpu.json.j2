@@ -1,0 +1,21 @@
+
+ {
+  "checks": {
+
+    "metrics-sar-cpu": {
+
+      "type": "metric",
+
+      "command": "/opt/sensu/plugins/metrics-elastic-sar-cpu.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60
+
+    }
+  }
+}
+
+

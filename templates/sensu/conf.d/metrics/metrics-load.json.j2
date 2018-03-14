@@ -1,0 +1,21 @@
+
+ {
+  "checks": {
+
+    "metrics-load": {
+
+      "type": "metric",
+
+      "command": "/opt/sensu/plugins/metrics-elastic-load.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60
+
+    }
+  }
+}
+
+

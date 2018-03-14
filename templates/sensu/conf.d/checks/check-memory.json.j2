@@ -4,7 +4,7 @@
 
     "check-memory-percent": {
 
-      "command": "/opt/sensu/plugins/check-memory-percent.rb",
+      "command": "/opt/sensu/plugins/check-memory-percent.rb -w 90 -c 98",
 
       "subscribers": [
         "linux"

@@ -1,0 +1,21 @@
+
+ {
+  "checks": {
+
+    "metrics-netif": {
+
+      "type": "metric",
+
+      "command": "/opt/sensu/plugins/metrics-elastic-netif.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60
+
+    }
+  }
+}
+
+

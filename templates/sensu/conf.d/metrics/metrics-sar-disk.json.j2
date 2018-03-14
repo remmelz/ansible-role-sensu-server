@@ -1,0 +1,21 @@
+
+ {
+  "checks": {
+
+    "metrics-sar-disk": {
+
+      "type": "metric",
+
+      "command": "/opt/sensu/plugins/metrics-elastic-sar-disk.rb",
+
+      "subscribers": [
+        "linux"
+      ],
+
+      "interval": 60
+
+    }
+  }
+}
+
+
